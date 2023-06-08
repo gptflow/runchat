@@ -139,7 +139,7 @@ async function resolveExtend(
   return node;
 }
 
-function findVariableSlots(input: string): string[] {
+export function findVariableSlots(input: string): string[] {
   const itemPattern = /{{(.*?)}}/g;
   const itemValues = new Set<string>();
   let match: RegExpExecArray | null;

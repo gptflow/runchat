@@ -3,6 +3,7 @@ import { Context, TaskConfig, Task, ChatGptParams } from "./types";
 export declare function getSingleConfig(request: string, baseDir: string): Promise<TaskConfig>;
 export declare function extendFromConfig(ctx: Context, config: TaskConfig, baseDir: string, parent?: TaskConfig): Promise<TaskConfig>;
 export declare function extendFromFileRequest(ctx: Context, request: string, baseDir: string, parent: TaskConfig): Promise<TaskConfig>;
+export declare function findVariableSlots(input: string): string[];
 export declare function configToString(config: TaskConfig): string;
 export declare function getConfigMessages(ctx: Context, node: TaskConfig): Promise<ChatCompletionRequestMessage[]>;
 export declare const getTitle: (config: TaskConfig) => string | null;
