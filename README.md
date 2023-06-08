@@ -30,6 +30,7 @@ Alright, let's get started. To call ChatGPT using RunChat, you simply need to ru
 ```bash
 npx runchat -m "Hey ChatGPT, how are you?"
 ```
-
-<img width="460" height="300" src="https://github.com/gptflow/runchat/blob/readme/assets/2.gif">
+<p align="center">
+  <img width="50%" src="https://github.com/gptflow/runchat/blob/readme/assets/2.gif">
+</p>
 
