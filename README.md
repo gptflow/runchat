@@ -31,4 +31,4 @@ Alright, let's get started. To call ChatGPT using RunChat, you simply need to ru
 npx runchat -m "Hey ChatGPT, how are you?"
 ```
 
-![](https://github.com/gptflow/runchat/blob/readme/assets/2.gif | width=100)
+![](https://github.com/gptflow/runchat/blob/readme/assets/2.gif | width=100px)
