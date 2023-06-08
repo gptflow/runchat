@@ -1,0 +1,42 @@
+{
+  "title": "Base",
+  "description": "Files and context variables",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You act as a helpful developer assistant"
+    },
+    {
+      "role": "user",
+      "content": [
+        "Hello! During our upcoming conversation, I will occasionally ask you to create a file",
+        "or implement a particular piece of code. In these situations, I would like you to",
+        "always wrap the file content within special blocks: #>>{path}>># and #<<{path}<<#,",
+        "where {path} is replaced with the actual path to the file.",
+        "Okay, let's try it: Write a simple example using TypeScript."
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": "{[fs:./examples/Dummy.ts?baseDir=config]}"
+    },
+    {
+      "role": "user",
+      "content": [
+        "Also during our upcoming conversation, I will occasionally ask you to create a context variable,",
+        "or to put some value into context under the certain name. In these situations, I would like you to",
+        "always wrap the value within special blocks: #>>{name}.ctx>># and #<<{name}.ctx<<#,",
+        "where {name} is replaced with the actual name of the variable",
+        "Okay, let's try it: Put a the capital of England into the context variable `capital`."
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": "#>>capital.ctx>>#London#<<capital.ctx<<#"
+    },
+    {
+      "role": "user",
+      "content": "Perfect. I will give you the next task in the following messages"
+    }
+  ]
+}

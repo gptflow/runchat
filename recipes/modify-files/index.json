@@ -1,0 +1,20 @@
+{
+  "title": "Modify files",
+  "extend": "../base",
+  "args": {
+    "files": "Which files to modify?",
+    "specs": "What kind of changes to perform?"
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        "Could you please modify files {[fs:{{files}}]} according to the following specs:",
+        "{{specs}}",
+        "",
+        "Please only response with the modified",
+        "file contents. Don't put any extra comments or anything."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "vars": {
+    "name": "Alex"
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hey {{name}}"
+    }
+  ]
+}
