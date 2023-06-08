@@ -31,9 +31,9 @@ Alright, let's get started. To call ChatGPT using RunChat, you simply need to ru
 npx runchat -m "Hey ChatGPT, how are you?"
 ```
 
-<p align="center">
-  <img src="https://github.com/gptflow/runchat/blob/readme/assets/how_are_you.gif">
-</p>
+
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/how_are_you.gif">
+
 
 Essentially, it's the same as going to the chat.openai.com website, writing a greeting, and getting a response, but it's all done through the console.
 
@@ -45,9 +45,9 @@ RunChat allows you to use variables in messages. Use the -v option in order to s
 npx runchat -m "Hey ChatGPT, my name is {{name}}. How are you?" -vname=Alex
 ```
 
-<p align="center">
-  <img width="80%" src="https://github.com/gptflow/runchat/blob/readme/assets/my_name_is.gif">
-</p>
+
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/my_name_is.gif">
+
 
 
 You can choose not to specify a variable's value using -v, and then RunChat will ask for its value using an interactive prompt.
