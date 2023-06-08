@@ -66,7 +66,9 @@ program
       });
 
       // Fill missing vars
-      const baseConfig = await getSingleConfig(configRequest, baseDir);
+      const baseConfig = configRequest
+        ? await getSingleConfig(configRequest, baseDir)
+        : { title: "Call ChatGPT", messages: [] };
       const missingArgs: TaskArgs = {};
       for (const [argName, argDsc] of Object.entries(baseConfig.args || {})) {
         if (!vars[argName] && !(baseConfig.vars || {})[argName]) {
