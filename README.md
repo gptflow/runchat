@@ -32,7 +32,7 @@ npx runchat -m "Hey ChatGPT, how are you?"
 ```
 
 <p align="center">
-  <img width="80%" src="https://github.com/gptflow/runchat/blob/readme/assets/how_are_you.gif">
+  <img src="https://github.com/gptflow/runchat/blob/readme/assets/how_are_you.gif">
 </p>
 
 Essentially, it's the same as going to the chat.openai.com website, writing a greeting, and getting a response, but it's all done through the console.
