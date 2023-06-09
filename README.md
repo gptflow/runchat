@@ -268,9 +268,9 @@ The `mode` parameter can take 3 values:
 
 - `default` - the value of the file will be its content wrapped in special start and end markers: the start marker `#>>{filename}>>#`, the end marker `#<<{filename}<<#`. This mode is convenient because it allows you to work not only with the contents of the file but also its path. We'll look at examples later.
 
-`text` - the value of the file will only be its content without any wrapping. This mode is convenient when indicating the path to the file is excessive and you just need to insert the text of the file.
+- `text` - the value of the file will only be its content without any wrapping. This mode is convenient when indicating the path to the file is excessive and you just need to insert the text of the file.
 
-`filename` - the value of the file will be its name. This mode is used when you need to get a list of files, not their content.
+- `filename` - the value of the file will be its name. This mode is used when you need to get a list of files, not their content.
 
 Let's look at all the examples.
 
