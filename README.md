@@ -59,7 +59,7 @@ npx runchat -m "Could you please create a short summary on what this file is abo
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/read_chapter.gif">
 
-In the example above, RunChat sees the block inside {[ and ]} and understands that this is a reference to a resource. `book_chapter.txt?mode=text` is the resource specifier, `fs` is the resource type. It then passes the specifier to the code that handles `fs` type resources, waits for a response, and inserts its content instead of the original structure.
+In the example above, RunChat sees the block inside `{[` and `]}` and understands that this is a reference to a resource. `book_chapter.txt?mode=text` is the resource specifier, `fs` is the resource type. It then passes the specifier to the code that handles `fs` type resources, waits for a response, and inserts its content instead of the original structure.
 
 A resource specifier is similar to an URL - it contains a path and can contain additional parameters. In this case, `book_chapter.txt` is the main path, and `mode=text` is a parameter indicating that you should include only the text of the file, without extra data like file path. We will delve deeper into the details in the sections about fs resolver and writing your own resolvers.
 
