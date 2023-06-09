@@ -30,7 +30,7 @@ export OPENAI_API_KEY=A_KEY_VALUE_OBTAINED_FROM_THE_SITE
 Before you read everything else, I believe that any good tool should be beneficial from the first minutes. So here's a quick recipe that will save you some time in your daily work. If you're a developer and you need to modify a file, write a function's code, add comments, or translate them into another language, simply run the command and drop a quick spec on desired changes:
 
 ```bash
-npx runchat -c runchat/recipes/modify-files -vfiles=src/pages/index.tsx
+npx runchat -c runchat/recipes/modify-files
 ```
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/modify-files.gif">
