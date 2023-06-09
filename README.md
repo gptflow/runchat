@@ -9,7 +9,7 @@ RunChat lets you set up one or multiple LLM chats into an operation line to addr
 
 RunChat is like a conveyor belt for ChatGPT tasks. It's like having a production line where you can set up and run several tasks, big or small, one after another, or even all at once. With RunChat, you can take all these separate tasks, whether they're simple or complex, and piece them together into one smooth operation.
 
-## Before we start: ChatGPT API KEY
+## ChatGPT API KEY
 
 RunChat uses the ChatGPT API, so in order to run the examples from this manual, you will need an API key. Here's what you need to do to create a key:
 
@@ -22,6 +22,18 @@ RunChat expects a key to be avaialable as an environment variable under the `OPE
 ```bash
 export OPENAI_API_KEY=A_KEY_VALUE_OBTAINED_FROM_THE_SITE
 ```
+
+## NodeJS is required
+
+## Quick profit
+
+Before you read everything else, I believe that any good tool should be beneficial from the first minutes. So here's a quick recipe that will save you some time in your daily work. If you're a developer and you need to modify a file, write a function's code, add comments, or translate them into another language, simply run the command and drop a quick spec on desired changes:
+
+```bash
+npx runchat -c runchat/recipes/modify-files -vfiles=src/pages/index.tsx
+```
+
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/modify-files.gif">
 
 ## Run you first chat
 
