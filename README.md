@@ -159,7 +159,7 @@ You can extend a chat file, by using an `extend` field of a config:
   "messages": [
     {
       "role": "user",
-      "content": "Please use italian localization"
+      "content": "Please use the Italian localization"
     }
   ]
 }
