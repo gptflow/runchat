@@ -88,8 +88,58 @@ npx runchat -m "Could you please create a short summary on what this file is abo
 Passing messages using the -m option is convenient when you are experimenting with short requests. But often, ChatGPT prompts can be quite long and complex to enter into the console every time. For instance, here's a prompt asking ChatGPT to pretend to be Linux:
 
 ```txt
-I want you to act as a Linux terminal. I will type commands, and you will reply with what the terminal should show. 
-I want you to only reply, with the terminal output inside one unique code block, and nothing else. Do not write 
-explanations. Do not type commands unless I instruct you to do so. When I need to tell you something in English, I will 
+I want you to act as a Linux terminal. I will type commands, and you will reply with what the terminal should show.
+I want you to only reply, with the terminal output inside one unique code block, and nothing else. Do not write
+explanations. Do not type commands unless I instruct you to do so. When I need to tell you something in English, I will
 do so by putting text inside curly brackets {like this}. My first command is pwd.
 ```
+
+In this case, you can save the message in a chat file and use the -c option to specify the path to the file. So let's create a configuration for the previous request in a file `be-a-linux.json`:
+
+```json
+{
+  "title": "Be a linux",
+  "args": {
+    "command": "A linux command to run"
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        "I want you to act as a Linux terminal. I will type commands, and you will reply with what the terminal should show.",
+        "I want you to only reply, with the terminal output inside one unique code block, and nothing else. Do not write",
+        "explanations. Do not type commands unless I instruct you to do so. When I need to tell you something in English, I will",
+        "do so by putting text inside curly brackets {like this}. "
+      ]
+    },
+    {
+      "role": "user",
+      "content": "My first command is {{command}}"
+    }
+  ]
+}
+```
+
+Pay attention to some details:
+
+- We specified the chat `title` field. This title will be displayed during the execution of runchat;
+- We used the `{{command}}` parameter so that a command could be set via a `-v` option or a interactive prompt;
+- We added an `args` object with an explanation for what `{{command}}` is used for. This explanation will be shown in the interactive prompt when you run runchat.
+- In the configuration file, you can break messages into parts for convenience, and we divided the message into 2 parts: the main prompt and the part with `{{command}}`.
+- Each message must have a `role` field where you should specify who is the author of the message. So far, we are using `user`. This will become an important part later in the section on Zero shot learning.
+
+```bash
+npx runchat -c ./be-a-linux.json
+```
+
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/be-a-linux.gif">
+
+Sometimes it may be convenient to keep your main prompt in a file, but also have the ability to add a clarifying or additional message to it. In this case, you can use both -c and -m options.
+
+```bash
+npx runchat -c ./be-a-linux.json -m "Please also run `date` command"
+```
+
+In this case, the message passed in -m will be added to the messages from the config file passed in -c.
+
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/be-a-linux-2.gif">
