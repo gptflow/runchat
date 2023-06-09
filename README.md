@@ -433,9 +433,36 @@ npx runchat -c runchat/recipes/base -m "Hey! Could you please create a Hello wor
 
 It uses the one shot prompting method to show ChatGPT what is the proper way to wrap files into start and end markers, as well as working with context variables. ( We'll talk about context variables in the next chapters )
 
+#### Faking file path
+
+Sometimes there may be a need to use a file from location `A`, but have the file resolver replace the file path in the markers with location `B`. For example, you're creating your own package with chat configs and using local example files. Then, in your message, you'll use a resource specifier like this: `{[fs:./examples/Navigation.tsx]}`
+
+And the file resolver will use the path `./examples/Navigation.tsx` in the start and end markers. But you want ChatGPT to think that this is actually the code for the file `src/components/Navigation.tsx`. In this case, you'll find the `usePath` parameter useful when referring to the file resolver. Upon receiving usePath, the file resolver will replace the actual file path with the one passed in the parameter: `{[fs:./examples/Navigation.tsx?usePath=src/components/Navigation.tsx]}`
+
 ### Context resolver
 
-- how to create and use context
+The next section is "Tasks," one of the most important, but before we get to it, we need to study another type of resource resolver - the context resolver. Every time you run RunChat, an execution context is created internally. The execution context is a store of various information necessary for RunChat to work. Among other things, the context stores a set of data in which you can write and from which you can read values.
+
+Just like with files, we can teach ChatGPT to wrap some data in special markers, so that RunChat can later recognize these markers and process the information contained in them. This is exactly how context variables work.
+
+Let's look at the second part of the base file that we saw in previous sections about creating real files.
+
+```json
+{
+  "role": "user",
+  "content": [
+    "Also during our upcoming conversation, I will occasionally ask you to create a context variable,",
+    "or to put some value into context under the certain name. In these situations, I would like you to",
+    "always wrap the value within special blocks: #>>{name}.ctx>># and #<<{name}.ctx<<#,",
+    "where {name} is replaced with the actual name of the variable",
+    "Okay, let's try it: Put a the capital of England into the context variable `capital`."
+  ]
+}
+```
+
+Every time I ask ChatGPT: "Hey, ChatGPT, could you please save today's date in the `now` context variable?" ChatGPT will respond by writing the text as `#>>now.ctx>>#Jun 9#<<now.ctx<<#`, after which RunChat will recognize the markers, understand that it's a `.ctx` file, meaning it's a context variable, and will save the value `Jun 9` in its data.
+
+So far, we've only learned how to run a single instance of a chat, and it may seem that context variables aren't really necessary. However, trust me, you will change your mind when we move on to the "Tasks" section.
 
 ## Tasks
 
