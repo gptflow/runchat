@@ -5,6 +5,7 @@ import {
   configToString,
   createTask,
   extendFromConfig,
+  findVariableSlots,
   getSingleConfig,
 } from "./task";
 import createFsResolver from "./resolvers/fs";
@@ -75,6 +76,15 @@ program
           missingArgs[argName] = argDsc;
         }
       }
+
+      // Also look up for vars in the message passed with -m
+      const messageVars = message ? findVariableSlots(message) : [];
+      for (const argName of messageVars) {
+        if (!vars[argName] && !(baseConfig.vars || {})[argName]) {
+          missingArgs[argName] = `Set "${argName}" value`;
+        }
+      }
+
       if (Object.keys(missingArgs).length) {
         const missingVars = await promptArgs(missingArgs);
         vars = {
