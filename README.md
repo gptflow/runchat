@@ -147,7 +147,7 @@ In this case, the message passed in -m will be added to the messages from the co
 ### Extending chat config files
 
 Sometimes it can be handy to describe a "base" interaction in a file to be able to reuse it later. Imagine you have many chats based on ChatGPT behaving like a Linux terminal. In this case, to avoid repeating this prompt every time, you can create a base file and inherit all others from it.
-In that case you can extend a chat file, by using an `extend` field of a config:
+You can extend a chat file, by using an `extend` field of a config:
 
 ```json
 {
@@ -165,6 +165,47 @@ In that case you can extend a chat file, by using an `extend` field of a config:
 }
 ```
 
+```bash
+npx runchat -c ./be-a-linux-it.json -m "Please also run `date` command"
+```
+
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/be-a-linux-it.gif">
 
-### Extending chat files: file path resolution
+### Config file path resolution
+
+It's important to note how the config file search takes place every time you specify a path to it using the `-c` option or by specifying it in the extend field.
+
+The search works based on the same algorithm that is used in `require.resolve` when searching for modules in NodeJS, so if you are a NodeJS developer, everything is pretty straightforward. You can read about the algorithm in detail at <a href="https://nodejs.org/api/modules.html#all-together">this link</a>.
+
+So when you run the cmd command:
+
+```bash
+npx runchat -c ./be-a-linux-it.json
+```
+
+The file resolution will go throw the following steps:
+
+- RunChat decides which directory it started at. For example its `/work`
+- require.resolve() is called with `./be-a-linux-it.json` request and a file `/work/be-a-linux-it.json` is found
+- `/work/be-a-linux-it.json` is read and a process repeated with a `./be-a-linux.json` file, because it is linked from the extend field of `/work/be-a-linux-it.json` file
+
+**Important note:** Remember that the first search starts from the directory where RunChat is launched, but if later a config A is loaded which refers to another config B through extend, then the file search will take place relative to the directory in which config A is located.
+
+### Config file distribution
+
+The fact that RunChat uses `require.resolve` algorythm uses means that you can easily create and publish your config files using the `npm` infrastructure and package repositories like <a href="npmjs.com">npmjs</a>.
+
+Suppose you want anyone to now be able to use your `be-a-linux` config. Here's what you need to do for that:
+
+- Read a little more about <a href="https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry">creating and publishing an npm package</a>.
+- Create an npm package and put the be-a-linux.json file in it.
+- Choose a name and publish the package on npm.
+
+After the package is published by you, anyone can install and use it:
+
+```bash
+npm i --save be-a-linux
+npx runchat -c be-a-linux/be-a-linux.json
+```
+
+We will discuss config distribution more in the Advanced section, but for now, let's move on.
