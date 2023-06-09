@@ -232,14 +232,31 @@ To manage the API parameters of ChatGPT, use the "chatParams" property in your c
   ]
 }
 ```
+
 ## Resource resolvers
+
+Before we move on to the main topic of this manual - **Tasks**, we need to delve a little more into **Resource resolvers**. We started discussing this topic at the beginning of the manual [beginning of the manual](#message-resources), but now it's time to learn more about the `File resolver` and `Context resolver` because they are very important for explaining how Tasks work.
 
 ### File system resolver
 
-- how to query a file or a multiple files
-- no files = bad
-- result modes: default, text, filename
-- baseDir
+As we have already mentioned, resources are a way to interact with external data or services.
+The file system resolver allows interaction with the file system:
+
+- searching for files and their names
+- creating and updating files
+
+To use the file resolver, you need to add a `{[fs:query?parameters]}` structure to the message. Where the `query` is a glob for searching for one or several files, and `parameters` is a string in the URL search format that can contain the following parameters:
+
+- `mode` - file search and reading mode. Possible values are: `default`, `text` or a `filename`, `default` is used if nothing is passed
+- `usePath` - replace the original file path with the one passed in this parameter
+- `baseDir` - which directory to consider as the base. Possible values are `project` or `config`. `project` is used if nothing is passed
+
+Before we get to the examples, we need to mention an important aspect. Any request to the file resolver always works relative to some base directory. There are two types of base directories:
+
+- `project` - the base directory is considered to be the directory where RunChat was originally launched. In this case, any search and file writing will be carried out relative to this directory.
+- `config` - the base directory is considered to be the config file directory where this resource link is located. This mode is useful for writing modular chat configs that refer to their local files.
+
+Let's delve a bit deeper into all parts of the request to the file resolver using examples.
 
 ### Context resolver
 
