@@ -126,7 +126,7 @@ Pay attention to some details:
 - We used the `{{command}}` parameter so that a command could be set via a `-v` option or a interactive prompt;
 - We added an `args` object with an explanation for what `{{command}}` is used for. This explanation will be shown in the interactive prompt when you run runchat.
 - In the configuration file, you can break messages into parts for convenience, and we divided the message into 2 parts: the main prompt and the part with `{{command}}`.
-- Each message must have a `role` field where you should specify who is the author of the message. So far, we are using `user`. This will become an important part later in the section on Zero shot learning.
+- Each message must have a `role` field where you should specify who is the author of the message. So far, we are using `user`. This will become an important part later in the section on `one/few shot prompting` methods.
 
 ```bash
 npx runchat -c ./be-a-linux.json
@@ -431,7 +431,7 @@ npx runchat -c runchat/recipes/base -m "Hey! Could you please create a Hello wor
 }
 ```
 
-It uses the zero shot learning method to show ChatGPT what is the proper way to wrap files into start and end markers, as well as working with context variables. ( We'll talk about context variables in the next chapters )
+It uses the one shot prompting method to show ChatGPT what is the proper way to wrap files into start and end markers, as well as working with context variables. ( We'll talk about context variables in the next chapters )
 
 ### Context resolver
 
