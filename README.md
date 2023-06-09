@@ -274,6 +274,67 @@ The `mode` parameter can take 3 values:
 
 Let's look at all the examples.
 
+Let's return to one of the first examples when we asked ChatGPT to create a summary for a book chapter:
+
+```bash
+npx runchat -llogs -m "Could you please create a short summary on what this file is about {[fs:book_chapter.txt?mode=text]}".
+```
+
+In this example, query = `book_chapter.txt`, and the parameters are `?mode=text`. From this, we can draw two conclusions:
+
+- the value of mode will be `text`, meaning the text of the file will be inserted without any wrappers
+- the value of `baseDir` will be `project`, meaning the file search will be performed relative to the directory where RunChat was launched
+
+To confirm this, let's run the command again, but this time we'll add the `-llogs` parameter to see the interaction log with ChatGPT.
+
+Now, if you check the contents of the 'logs' directory, you can see the execution log files inside:
+
+```txt
+[Chat Call ChatGPT] messages: [
+  {
+    "role": "user",
+    "content": "Could you please create a short summary on what this file is about “My dear Victor, You have probably waited impatiently for a letter to fix the date of your return to us; and I was at first tempted to write only a few lines, merely mentioning the day on which I should expect you.
+
+... Chapter text goes here ...
+
+“Your affectionate and afflicted father,
+“Alphonse Frankenstein.
+."
+  }
+]
+[Chat Call ChatGPT] gpt response:
+The file is a letter from Alphonse Frankenstein to his son Victor, informing him of the tragic death of his younger brother William. William was murdered and the family is devastated by the loss. Alphonse urges Victor to return home to console his grieving family and to not seek vengeance against the murderer.
+[Chat Call ChatGPT] gpt response done.
+
+[Chat Call ChatGPT] parsed files .
+```
+
+You can see that the chapter text begins immediately after "Could you please create a short summary on what this file is about" in the sent message.
+
+Now, let's change the mode from `text` to `default`. To do this, just delete the part with `?mode=text` and run the command again. After running a command and reviewing the logs files we can see that now chapter file is wrapped into a `#>>book_chapter.txt>>#` and `#<<book_chapter.txt<<#` markers:
+
+```txt
+[Chat Call ChatGPT] messages: [
+  {
+    "role": "user",
+    "content": "Could you please create a short summary on what this file is about #>>book_chapter.txt>>#“My dear Victor,
+
+“You have probably waited impatiently for a letter to fix the date of your return to us; and I was at first tempted to write only a few lines, merely mentioning the day on which I should expect you. But that would be a cruel kindness, and I dare not do it. What would be your surprise, my son, when you expected
+
+... Chapter text goes here ...
+
+“Your affectionate and afflicted father,
+“Alphonse Frankenstein.
+#<<book_chapter.txt<<#."
+  }
+]
+[Chat Call ChatGPT] gpt response:
+The file contains a letter from Alphonse Frankenstein to his son Victor, informing him of the tragic death of his younger brother William. William was murdered and the family is devastated by the loss. Alphonse urges Victor to return home to console his grieving family and not to seek vengeance against the murderer.
+[Chat Call ChatGPT] gpt response done.
+
+[Chat Call ChatGPT] parsed files
+```
+
 ### Context resolver
 
 - how to create and use context
