@@ -311,7 +311,13 @@ The file is a letter from Alphonse Frankenstein to his son Victor, informing him
 
 You can see that the chapter text begins immediately after "Could you please create a short summary on what this file is about" in the sent message.
 
-Now, let's change the mode from `text` to `default`. To do this, just delete the part with `?mode=text` and run the command again. After running a command and reviewing the logs files we can see that now chapter file is wrapped into a `#>>book_chapter.txt>>#` and `#<<book_chapter.txt<<#` markers:
+Now, let's change the mode from `text` to `default`. To do this, just delete the part with `?mode=text` and run the command again.
+
+```bash
+npx runchat -llogs -m "Could you please create a short summary on what this file is about {[fs:book_chapter.txt]}".
+```
+
+After running a command and reviewing the logs files we can see that now chapter file is wrapped into a `#>>book_chapter.txt>>#` and `#<<book_chapter.txt<<#` markers:
 
 ```txt
 [Chat Call ChatGPT] messages: [
@@ -334,6 +340,98 @@ The file contains a letter from Alphonse Frankenstein to his son Victor, informi
 
 [Chat Call ChatGPT] parsed files
 ```
+
+And finally, let's replace mode=text with mode=filename and run the command for the third time.
+
+```bash
+npx runchat -llogs -m "Could you please create a short summary on what this file is about {[fs:book_chapter.txt?mode=filename]}".
+```
+
+```txt
+[Chat Call ChatGPT] messages: [
+  {
+    "role": "user",
+    "content": "Could you please create a short summary on what this file is about book_chapter.txt."
+  }
+]
+[Chat Call ChatGPT] gpt response:
+As an AI language model, I do not have access to the specific file named "book_chapter.txt" as it is not provided in the prompt. Please provide more information or context about the file so I can assist you better.
+[Chat Call ChatGPT] gpt response done.
+[Chat Call ChatGPT] parsed files .
+```
+
+You can see that in this case, the resource resolver returned the name of the file itself.
+
+#### Creating real files
+
+Each mode has its purpose: `text` is like using variables but with files, `filename` is needed when you want to get a list of directory files, but the `default` mode has a special purpose.
+
+The thing is that the ChatGPT API does not have a concept like a file. You can't ask ChatGPT to write you a React component file with the path `src/components/MyApp.tsx` and then retrieve it through the `getFile()` method. All you can operate with is text.
+
+But this problem can be easily circumvented by introducing file start and end markers `#>>{filename}>>#` and `#<<{filename}<<#` and teaching ChatGPT to wrap resulting files in this markers.
+
+RunChat can find such markers and when they are detected, the text within these markers is copied to a real file in your file system.
+
+This approach allows you to do this:
+
+"Hey, ChatGPT could you please generate me a 'Hello World' React component and put it into a src/components/MyApp.tsx file."
+
+And if you've previously taught ChatGPT to work with start and end markers, the result of executing this command will be a React component file saved in your project:
+
+```bash
+npx runchat -c runchat/recipes/base -m "Hey! Could you please create a Hello world react component and save it to a MyComponent.tsx file"
+```
+
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/create-file.gif">
+
+`runchat/recipes/base` is the base chat file shipped with the `runchat` package. It used to teach ChatGPT how to work with file start and end markers, as well as with context variables. Here's the content of this file:
+
+```json
+{
+  "title": "Base",
+  "description": "Files and context variables",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You act as a helpful developer assistant"
+    },
+    {
+      "role": "user",
+      "content": [
+        "Hello! During our upcoming conversation, I will occasionally ask you to create a file",
+        "or implement a particular piece of code. In these situations, I would like you to",
+        "always wrap the file content within special blocks: #>>{path}>># and #<<{path}<<#,",
+        "where {path} is replaced with the actual path to the file.",
+        "Okay, let's try it: Write a simple example using TypeScript."
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": "{[fs:./examples/Dummy.ts?baseDir=config]}"
+    },
+    {
+      "role": "user",
+      "content": [
+        "Also during our upcoming conversation, I will occasionally ask you to create a context variable,",
+        "or to put some value into context under the certain name. In these situations, I would like you to",
+        "always wrap the value within special blocks: #>>{name}.ctx>># and #<<{name}.ctx<<#,",
+        "where {name} is replaced with the actual name of the variable",
+        "Okay, let's try it: Put a the capital of England into the context variable `capital`."
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": "#>>capital.ctx>>#London#<<capital.ctx<<#"
+    },
+    {
+      "role": "user",
+      "content": "Perfect. I will give you the next task in the following messages"
+    }
+  ]
+}
+```
+
+It uses the zero shot learning method to show ChatGPT what is the proper way to wrap files into start and end markers, as well as working with context variables. ( We'll talk about context variables in the next chapters )
 
 ### Context resolver
 
