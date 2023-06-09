@@ -232,6 +232,7 @@ To manage the API parameters of ChatGPT, use the "chatParams" property in your c
   ]
 }
 ```
+## Resource resolvers
 
 ### File system resolver
 
@@ -244,7 +245,7 @@ To manage the API parameters of ChatGPT, use the "chatParams" property in your c
 
 - how to create and use context
 
-### Tasks
+## Tasks
 
 Everything we've discussed so far has been about launching just one chat with ChatGPT, but what if we're tackling a problem that's too complex to solve with just one chat?
 For example:
@@ -258,7 +259,7 @@ For example:
 - Var and resource resolution phases
 - Var resolution model
 
-### Advanced
+## Advanced
 
 - Create and distribute own chat config
 - Creating and distribute own resolver
