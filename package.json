@@ -1,6 +1,6 @@
 {
   "name": "runchat",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Manage one or multiple LLM chats to address problems of any complexity.",
   "author": "Alex Gutnikov",
   "main": "./lib/runchat.js",
