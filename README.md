@@ -85,7 +85,7 @@ npx runchat -m "Could you please create a short summary on what this file is abo
 
 ### Chat config files
 
-Passing messages using the -m option is convenient when you are experimenting with short requests. But often, ChatGPT prompts can be quite long and complex to enter into the console every time. For instance, here's a prompt asking ChatGPT to pretend to be Linux:
+Passing messages using the `-m` option is convenient when you are experimenting with short requests. But often, ChatGPT prompts can be quite long and complex to enter into the console every time. For instance, here's a prompt asking ChatGPT to pretend to be a Linux:
 
 ```txt
 I want you to act as a Linux terminal. I will type commands, and you will reply with what the terminal should show.
@@ -94,7 +94,7 @@ explanations. Do not type commands unless I instruct you to do so. When I need t
 do so by putting text inside curly brackets {like this}. My first command is pwd.
 ```
 
-In this case, you can save the message in a chat file and use the -c option to specify the path to the file. So let's create a configuration for the previous request in a file `be-a-linux.json`:
+In this case, you can save the message in a chat file and use the `-c` option to specify the path to the file. So let's create a configuration for the previous request in a file `be-a-linux.json`:
 
 ```json
 {
@@ -143,3 +143,28 @@ npx runchat -c ./be-a-linux.json -m "Please also run `date` command"
 In this case, the message passed in -m will be added to the messages from the config file passed in -c.
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/be-a-linux-2.gif">
+
+### Extending chat config files
+
+Sometimes it can be handy to describe a "base" interaction in a file to be able to reuse it later. Imagine you have many chats based on ChatGPT behaving like a Linux terminal. In this case, to avoid repeating this prompt every time, you can create a base file and inherit all others from it.
+In that case you can extend a chat file, by using an `extend` field of a config:
+
+```json
+{
+  "title": "A Linux. Italian localization.",
+  "extend": "./be-a-linux.json",
+  "vars": {
+    "command": "pwd"
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": "Please use italian localization"
+    }
+  ]
+}
+```
+
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/be-a-linux-it.gif">
+
+### Extending chat files: file path resolution
