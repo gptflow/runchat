@@ -73,7 +73,7 @@ This functionality can be really powerful as it allows the chatbot to interact w
 
 ### Mixing resources and variables
 
-What if I want to use a file resource, but at the same time, I want the path to the file to be specified dynamically? In this case, you can use a variable inside the reference to the resource:
+What if you want to use a file resource, but at the same time, I want the path to the file to be specified dynamically? In this case, you can use a variable inside the reference to the resource:
 
 ```bash
 npx runchat -m "Could you please create a short summary on what this file is about {[fs:{{file}}?mode=text]}".
