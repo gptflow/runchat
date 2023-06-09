@@ -65,11 +65,13 @@ A resource specifier is similar to an URL - it contains a path and can contain a
 
 The possibilities with resource types are quite extensive. The idea behind resources is to create a way to interact with external data or services, and insert that data directly into the chat as required. For example, in addition to file system resources (like in the example above), you could also create a resource type for API calls to various web services, databases, IoT devices, and much more. For example you could create a "weather" type resource. This resource type could be configured to make an API request to a weather service (like Google Weather or OpenWeatherMap), and return the response in a format that's useful for your chat.
 
+This functionality can be really powerful as it allows the chatbot to interact with real-time data and services, which can significantly increase the range of tasks it can perform and the accuracy of its responses.
+
 ```bash
 npx runchat -m "Hey ChatGPT! The weather in London today is {[weather:London]}. What do you recommend I should wear?"
 ```
 
-This functionality can be really powerful as it allows the chatbot to interact with real-time data and services, which can significantly increase the range of tasks it can perform and the accuracy of its responses.
+When this chat is run, the ChatGPT would receive a message like "Hey ChatGPT! The weather in London today is sunny and 24 degrees Celsius. What do you recommend I should wear?" and it would generate a response based on this. This way, you can include real-time data in your chats with the model. We'll go through an example of how you can create a resource and use it in your project in the advanced section below.
 
 ### Mixing resources and variables
 
@@ -80,3 +82,16 @@ npx runchat -m "Could you please create a short summary on what this file is abo
 ```
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/read_chapter_dynamic.gif">
+
+### Chat config files
+
+Passing messages using the -m option is convenient when you are experimenting with short requests. But often, ChatGPT prompts can be quite long and complex to enter into the console every time. For instance, here's a prompt asking ChatGPT to pretend to be Linux:
+
+```txt
+I want you to act as a Linux terminal. I will type commands, and you will
+reply with what the terminal should show. I want you to only reply, with
+the terminal output inside one unique code block, and nothing else. Do not
+write explanations. Do not type commands unless I instruct you to do so. When I
+need to tell you something in English, I will do so by putting text inside curly
+brackets {like this}. My first command is pwd.
+```
