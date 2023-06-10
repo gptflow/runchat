@@ -480,20 +480,17 @@ So far, we've only learned how to run a single instance of a chat, and it may se
 
 ## Tasks
 
-Everything we've discussed so far has been about launching just one chat with ChatGPT, but what if we're tackling a problem that's too complex to solve with just one chat? To understand this in more detail, let's return to the example with the chapter summary from the book, but now let's imagine that we have several files and we want to:
-
-- simultaneously write a summary for each chapter;
-- create a table of contents based on the summaries;
+Everything we've discussed so far has been about launching just one chat with ChatGPT, but what if we're tackling a problem that's too complex to solve with just one chat? To understand this in more detail, let's return to the example with the chapter summary from the book, but now let's imagine that we have several files and we want to create a a resulting file that contains a table of contents and a short summary of each chapter. We also want to generate summaries in parallel for speed efficiency.
 
 To run parallel generation we could run several RunChat commands and wait for their execution:
 
 ```bash
 # Summarize
-npx runchat -m "Could you please create a short summary on what this file is about {[fs:chapter_1.txt?mode=text]}" > ch_1_summary.txt &
-npx runchat -m "Could you please create a short summary on what this file is about {[fs:chapter_2.txt?mode=text]}" > ch_2_summary.txt &
+npx runchat -m "Could you please create a short summary on what this file is about {[fs:chapter_1.txt]}" > ch_1_summary.txt &
+npx runchat -m "Could you please create a short summary on what this file is about {[fs:chapter_2.txt]}" > ch_2_summary.txt &
 wait
 # Create a table of contents
-npx runchat -m "Could you please review text summaries from {[fs:./*_summary.txt]} and create a table of contents. List of contents should contain a number and a short description sentence of 5-10 words. Only include chapter items for chapters from the input" > table-of-contents.txt
+npx runchat -m "Could you please review text summaries from {[fs:./*_summary.txt]} and create a resulting file that contains: a table of contents and a summary texts for the chapters passed to the input. A table of contents item should contain a number and a short description sentence of 5-10 words. Do not add any chapters that are not in the input" > result.txt
 ```
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-1.gif">
@@ -503,7 +500,7 @@ While this approach is absolutely valid, it has its flaws:
 - It requires some bash skills. I like bash, but it would be nice to solve such tasks without the need to program anything.
 - It will be more difficult for you to share your code with others, as distributing a bash file is much harder than, for example, an npm package.
 - You won't be able to use bash code from other RunChat configuration files.
-- Passing data between tasks through files is not always the best option. For instance, if it's temporary data - you'll have to remember to delete temporary files after executing the command.
+- Passing data between tasks through files is not always the best option. For example: in the command above, we didn't need to create summary files, they were needed as a storage for intermediate data, and after executing the commands, don't forget to delete them.
 
 To address this, RunChat supports the ability to create multiple tasks within config files. To describe tasks, you need to use the `tasks` property in the config file:
 
