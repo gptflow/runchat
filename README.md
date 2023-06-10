@@ -547,17 +547,17 @@ Above, we provided a configuration for parallel summary generation. Now let's ad
   "tasks": [
     {
       "title": "Summaries",
-      "extend": "runchat/recipes/base",
       "tasks": [
         {
           "title": "Chapter 1 summary",
+          "extend": "runchat/recipes/base",
           "messages": [
             {
               "role": "user",
               "content": [
-                "Could you please create a short summary on what this file is about:",
+                "Please read the text:",
                 "{[fs:chapter_1.txt?mode=text]}.",
-                "Please put the result into a `chapter_1_summary` context variable`"
+                "Create a file `chapter_1_summary.ctx` that contains a short summary on what this text is about."
               ]
             }
           ]
@@ -569,9 +569,9 @@ Above, we provided a configuration for parallel summary generation. Now let's ad
             {
               "role": "user",
               "content": [
-                "Could you please create a short summary on what this file is about:",
-                "{[fs:chapter_2.txt?mode=text]}",
-                "Please put the result into a `chapter_2_summary` context variable`"
+                "Please read the text:",
+                "{[fs:chapter_2.txt?mode=text]}.",
+                "Create a file `chapter_2_summary.ctx` that contains a short summary on what this text is about."
               ]
             }
           ]
@@ -586,10 +586,11 @@ Above, we provided a configuration for parallel summary generation. Now let's ad
         {
           "role": "user",
           "content": [
-            "Could you please review text summaries from {[ctx:*_summary]} and create",
-            "a table of contents. List of contents should contain a number and a short description",
-            "sentence of 5-10 words. Only include chapter items for chapters from the input",
-            "Please save result to the table-of-contents.txt file"
+            "Review text summaries from {[ctx:*_summary]} and create a text file result.txt",
+            "that contains: a table of contents and a summary texts for the ",
+            "chapters passed to the input. A table of contents item should contain a number ",
+            "and a short description sentence of 5-10 words. Do not add any chapters that ",
+            "are not in the input."
           ]
         }
       ]
@@ -597,6 +598,8 @@ Above, we provided a configuration for parallel summary generation. Now let's ad
   ]
 }
 ```
+
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-2.gif">
 
 - Running multiple tasks
   generate summary concurrently
