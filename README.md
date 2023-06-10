@@ -605,12 +605,12 @@ npx runchat -c ./toc.json
 }
 ```
 
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-2.gif">
+
 Take note of the following:
 
 - We've added another level of tasks, now there are 2 levels.
 - We've added `extend` for tasks that need to work with files and context.
-
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-2.gif">
 
 Although this example solves most of the drawbacks of the previous bash example:
 
