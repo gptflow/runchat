@@ -40,6 +40,9 @@ function resolveFileToExtend(baseDir: string, request: string) {
   // Search node_modules
   else {
     const paths = getSearchPaths(baseDir);
+    if (request.startsWith("runchat/recipes")) {
+      paths.push(__dirname);
+    }
     try {
       filePath = require.resolve(request, {
         paths,
