@@ -2,7 +2,6 @@
 import { Command } from "commander";
 import { createContext } from "./context";
 import {
-  configToString,
   createTask,
   extendFromConfig,
   findVariableSlots,
