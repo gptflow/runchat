@@ -589,7 +589,7 @@ Above, we provided a configuration for parallel summary generation. Now let's ad
         {
           "role": "user",
           "content": [
-            "Could you please review text summaries from {[ctx:./*_summary]} and create",
+            "Could you please review text summaries from {[ctx:*_summary]} and create",
             "a table of contents. List of contents should contain a number and a short description",
             "sentence of 5-10 words. Only include chapter items for chapters from the input",
             "Please save result to the table-of-contents.txt file"
