@@ -504,7 +504,7 @@ While this approach is absolutely valid, it has its flaws:
 - You won't be able to use bash code from other RunChat configuration files.
 - Passing data between tasks through files is not always the best option. For example: in the command above, we didn't need to create summary files, they were needed as a storage for intermediate data, and after executing the commands, don't forget to delete them.
 
-To address this, RunChat supports the ability to create multiple tasks within config files. To describe tasks, you need to use the `tasks` property in the config file:
+To address this, RunChat supports the ability to create multiple tasks within config files. To describe tasks, you need to use the `tasks` property in the config file. Lets create a `toc.json` config file:
 
 ```json
 {
@@ -542,6 +542,87 @@ To address this, RunChat supports the ability to create multiple tasks within co
 Please note the `concurrent` property. By default, its value is `false` and tasks inside `tasks` are executed sequentially. Sequential execution is slower, but it allows you to pass data down the chain from one task to another.
 
 Above, we provided a configuration for parallel summary generation. Now let's add the ability to create a table of contents to it
+
+```bash
+npx runchat -c ./toc.json
+```
+
+```json
+{
+  "title": "Summaries and table of contents",
+  "tasks": [
+    {
+      "title": "Summaries",
+      "tasks": [
+        {
+          "title": "Chapter 1 summary",
+          "extend": "runchat/recipes/base",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                "Please read the text:",
+                "{[fs:chapter_1.txt?mode=text]}.",
+                "Create a file `chapter_1_summary.txt` that contains a short summary on what this text is about."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Chapter 2 summary",
+          "extend": "runchat/recipes/base",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                "Please read the text:",
+                "{[fs:chapter_2.txt?mode=text]}.",
+                "Create a file `chapter_2_summary.txt` that contains a short summary on what this text is about."
+              ]
+            }
+          ]
+        }
+      ],
+      "concurrent": true
+    },
+    {
+      "title": "Table of contents",
+      "extend": "runchat/recipes/base",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            "Review text summaries from {[fs:*_summary.txt]} and create a text file result.txt",
+            "that contains: a table of contents and a summary texts for the ",
+            "chapters passed to the input. A table of contents item should contain a number ",
+            "and a short description sentence of 5-10 words. Do not add any chapters that ",
+            "are not in the input."
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Take note of the following:
+
+- We've added another level of tasks, now there are 2 levels.
+- We've added `extend` for tasks that need to work with files and context.
+
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-2.gif">
+
+Although this example solves most of the drawbacks of the previous bash example:
+
+- You didn't have to program anything
+- You can easily distribute this config by creating an npm package for it
+- You can reuse this config by inheriting from it
+
+It still has one drawback:
+
+In addition to result.txt, it creates extraneous chapter_1_summary.txt and chapter_2_summary.txt files.
+There's nothing complicated about deleting extraneous files after execution, or not deleting them if they don't bother you, but the more complex your config files and the task you're solving, the higher the probability that one day these files will confuse you, so it's better not to create them unnecessarily. Moreover, there's a simple way to achieve this using `context` variables.
+The changes that need to be made to the config file are minimal. It's enough to change the extensions of the intermediate files to .ctx and use context resolver instead of file resolver:
 
 ```json
 {
@@ -603,28 +684,12 @@ Above, we provided a configuration for parallel summary generation. Now let's ad
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-2.gif">
 
-- Running multiple tasks
-  generate summary concurrently
-
-- Nesting
-- Execution and result order
-  diagram
-
-- Passing data between tasks: Context
-  collect summaries into one file ( ctx )
-  generate summary one by one with the announce on previous chapter ( ctx )
-
-- Passing data between tasks: Files
-  same example using files
-
-Task tree mental model
-
-- resolution phases
-- Var resolution model
-- Resource resolution model
-
 ## Advanced
 
+- Task tree mental model
+- Resolution phases
+- Var resolution model
+- Resource resolution model
 - Create and distribute own chat config
 - Creating and distribute own resolver
 - Project file
