@@ -620,7 +620,7 @@ Although this example solves most of the drawbacks of the previous bash example:
 
 It still has one drawback:
 
-- In addition to result.txt, it creates extraneous chapter_1_summary.txt and chapter_2_summary.txt files.
+- In addition to `result.txt`, it creates extraneous `chapter_1_summary.txt` and `chapter_2_summary.txt` files.
 
 There's nothing complicated about deleting extraneous files after execution, or not deleting them if they don't bother you, but the more complex your config files and the task you're solving, the higher the probability that one day these files will confuse you, so it's better not to create them unnecessarily. Moreover, there's a simple way to achieve this using `context` variables.
 The changes that need to be made to the config file are minimal. It's enough to change the extensions of the intermediate files to .ctx and use context resolver instead of file resolver:
