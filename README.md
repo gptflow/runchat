@@ -498,7 +498,7 @@ npx runchat -m "Could you please review text summaries from {[fs:./*_summary.txt
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-1.gif">
 
-While this approach is an absolutely valid , it has its flaws:
+While this approach is absolutely valid, it has its flaws:
 
 - It requires some skills in working with bash. I love bash, but it would be nice to solve such tasks without the need to program anything.
 - It will be more difficult for you to share your code with others, as distributing a bash file is much harder than, for example, an npm package.
