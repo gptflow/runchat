@@ -543,10 +543,6 @@ Please note the `concurrent` property. By default, its value is `false` and task
 
 Above, we provided a configuration for parallel summary generation. Now let's add the ability to create a table of contents to it
 
-```bash
-npx runchat -c ./toc.json
-```
-
 ```json
 {
   "title": "Summaries and table of contents",
@@ -603,6 +599,10 @@ npx runchat -c ./toc.json
     }
   ]
 }
+```
+
+```bash
+npx runchat -c ./toc.json
 ```
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-2.gif">
