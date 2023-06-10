@@ -1,6 +1,5 @@
 <div align="center">
-  <p style="font-size:100px;">⚡</p>
-  <h1>RunChat</h1>
+  <h1>⚡ RunChat</h1>
   <p>
 RunChat lets you set up one or multiple LLM chats into an operation line to address problems of any complexity.
   </p>
