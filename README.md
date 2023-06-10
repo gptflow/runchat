@@ -498,6 +498,109 @@ npx runchat -m "Could you please review text summaries from {[fs:./*_summary.txt
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-1.gif">
 
+While this approach is an absolutely valid , it has its flaws:
+
+- It requires some skills in working with bash. I love bash, but it would be nice to solve such tasks without the need to program anything.
+- It will be more difficult for you to share your code with others, as distributing a bash file is much harder than, for example, an npm package.
+- You won't be able to use bash code from other RunChat configuration files.
+- Passing data between tasks through files is not always the best option. For instance, if it's temporary data - you'll have to remember to delete temporary files after executing the command.
+
+To address this, RunChat supports the ability to create multiple tasks within config files. To describe tasks, you need to use the `tasks` property in the config file:
+
+```json
+{
+  "title": "Summary and contents",
+  "tasks": [
+    {
+      "title": "Chapter 1 summary",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            "Could you please create a short summary on what this file is about:",
+            "{[fs:chapter_1.txt?mode=text]}"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Chapter 2 summary",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            "Could you please create a short summary on what this file is about:",
+            "{[fs:chapter_2.txt?mode=text]}"
+          ]
+        }
+      ]
+    }
+  ],
+  "concurrent": true
+}
+```
+
+Please note the `concurrent` property. By default, its value is `false` and tasks inside `tasks` are executed sequentially. Sequential execution is slower, but it allows you to pass data down the chain from one task to another.
+
+Above, we provided a configuration for parallel summary generation. Now let's add the ability to create a table of contents to it
+
+```json
+{
+  "title": "Summaries and table of contents",
+  "tasks": [
+    {
+      "title": "Summaries",
+      "extend": "runchat/recipes/base",
+      "tasks": [
+        {
+          "title": "Chapter 1 summary",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                "Could you please create a short summary on what this file is about:",
+                "{[fs:chapter_1.txt?mode=text]}.",
+                "Please put the result into a `chapter_1_summary context variable`"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Chapter 2 summary",
+          "extend": "runchat/recipes/base",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                "Could you please create a short summary on what this file is about:",
+                "{[fs:chapter_2.txt?mode=text]}",
+                "Please put the result into a `chapter_2_summary context variable`"
+              ]
+            }
+          ]
+        }
+      ],
+      "concurrent": true
+    },
+    {
+      "title": "Table of contents",
+      "extend": "runchat/recipes/base",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            "Could you please review text summaries from {[ctx:./*_summary]} and create",
+            "a table of contents. List of contents should contain a number and a short description",
+            "sentence of 5-10 words. Only include chapter items for chapters from the input",
+            "Please save result to the table-of-contents.txt file"
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
 - Running multiple tasks
   generate summary concurrently
 
