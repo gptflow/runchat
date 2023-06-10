@@ -25,7 +25,7 @@ export OPENAI_API_KEY=A_KEY_VALUE_OBTAINED_FROM_THE_SITE
 
 ## NodeJS is required
 
-TODO:
+In order to use RunChat, you need to have NodeJS installed. We recommend installing the <a href="https://nodejs.org/en">LTS version</a>. After that, in most cases, you won't need to install any additional packages, as RunChat operates using `npx`.
 
 ## Quick profit
 
@@ -457,30 +457,21 @@ And the file resolver will use the path `./examples/Navigation.tsx` in the start
 
 ### Context resolver
 
-TOOD REWRITE IT
+Files are a handy tool, but sometimes there may be a need to work with data without saving it to physical storage. For these situations, there is a special kind of resolver - `context resolver`. The context resolver works exactly the same way as the `file resolver`, with the only difference being that, unlike the file resolver, it saves data not to disk but to a special data object that all tasks executed within a RunChat session have access to.
 
-The next section is "Tasks," one of the most important, but before we get to it, we need to study another type of resource resolver - the context resolver. Every time you run RunChat, an execution context is created internally. The execution context is a store of various information necessary for RunChat to work. Among other things, the context stores a set of data in which you can write and from which you can read values.
+If you want to save some data to the context, you can ask ChatGPT to create a file with the extension `.ctx`. For example:
 
-Just like with files, we can teach ChatGPT to wrap some data in special markers, so that RunChat can later recognize these markers and process the information contained in them. This is exactly how context variables work.
-
-Let's look at the second part of the base file that we saw in previous sections about creating real files.
-
-```json
-{
-  "role": "user",
-  "content": [
-    "Also during our upcoming conversation, I will occasionally ask you to create a context variable,",
-    "or to put some value into context under the certain name. In these situations, I would like you to",
-    "always wrap the value within special blocks: #>>{name}.ctx>># and #<<{name}.ctx<<#,",
-    "where {name} is replaced with the actual name of the variable",
-    "Okay, let's try it: Put a the capital of England into the context variable `capital`."
-  ]
-}
+```txt
+"Hey ChatGPT, could you please create a file called my_variable.ctx and put the current date in that file?"
 ```
 
-Every time I ask ChatGPT: "Hey, ChatGPT, could you please save today's date in the `now` context variable?" ChatGPT will respond by writing the text as `#>>now.ctx>>#Jun 9#<<now.ctx<<#`, after which RunChat will recognize the markers, understand that it's a `.ctx` file, meaning it's a context variable, and will save the value `Jun 9` in its data.
+If you have inherited your configuration from `runchat/recipes/base`, then in its response, ChatGPT will put the current date in the file `start` and end `tags`:
 
-So far, we've only learned how to run a single instance of a chat, and it may seem that context variables aren't really necessary. However, trust me, you will change your mind when we move on to the "Tasks" section.
+```txt
+Today's date is #>>my_variable.ctx>>#June 9, 2023#<<my_variable<<#
+```
+
+After that, RunChat will recognize these tags, understand that the file extension is .ctx and therefore, instead of saving it to disk, it will put it in the context variable storage so that other tasks can later use this value. (We will talk about tasks right in the next section)
 
 ## Tasks
 
