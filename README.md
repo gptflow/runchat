@@ -90,7 +90,7 @@ When this chat is run, the ChatGPT would receive a message like "Hey ChatGPT! Th
 What if you want to use a file resource, but at the same time, the path to the file has to be specified dynamically? In this case, you can use a variable inside the reference to the resource:
 
 ```bash
-npx runchat -m "Could you please create a short summary on what this file is about {[fs:{{file}}?mode=text]}".
+npx runchat -m "Could you please create a short summary on what this file is about {[fs:{{file}}?mode=text]}"
 ```
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/read_chapter_dynamic.gif">
@@ -176,6 +176,8 @@ You can extend a chat file, by using an `extend` field of a config:
   ]
 }
 ```
+
+Note that by extending the `be-a-linux.json` file, we added the message "Please use the Italian localization". This works the same as when using the `-m` and `-c` options together - messages from the inheriting file will be added to the messages from the file that it inherited.
 
 ```bash
 npx runchat -c ./be-a-linux-it.json -m "Please also run `date` command"
@@ -478,17 +480,46 @@ So far, we've only learned how to run a single instance of a chat, and it may se
 
 ## Tasks
 
-Everything we've discussed so far has been about launching just one chat with ChatGPT, but what if we're tackling a problem that's too complex to solve with just one chat?
-For example:
+Everything we've discussed so far has been about launching just one chat with ChatGPT, but what if we're tackling a problem that's too complex to solve with just one chat? To understand this in more detail, let's return to the example with the chapter summary from the book, but now let's imagine that we have several files and we want to:
+
+- simultaneously write a summary for each chapter;
+- combine all the summaries into one and save the result in a file.
+- Add the list of chapters at the beginning of the resulting file.
+
+To run parallel generation we could run several RunChat commands and wait for their execution:
+
+```bash
+# Summarize
+npx runchat -m "Could you please create a short summary on what this file is about {[fs:chapter_1.txt?mode=text]}" > ch_1_summary.txt &
+npx runchat -m "Could you please create a short summary on what this file is about {[fs:chapter_2.txt?mode=text]}" > ch_2_summary.txt &
+wait
+# Create a table of contents
+npx runchat -m "Could you please review text summaries from {[fs:./*_summary.txt]} and create a table of contents. List of contents should contain a number and a short description sentence of 5-10 words. Only include chapter items for chapters from the input" > table-of-contents.txt
+```
+
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-1.gif">
+
+
 
 - Running multiple tasks
+  generate summary concurrently
+
 - Nesting
 - Execution and result order
+  diagram
+
 - Passing data between tasks: Context
+  collect summaries into one file ( ctx )
+  generate summary one by one with the announce on previous chapter ( ctx )
+
 - Passing data between tasks: Files
-- Task tree mental model
-- Var and resource resolution phases
+  same example using files
+
+Task tree mental model
+
+- resolution phases
 - Var resolution model
+- Resource resolution model
 
 ## Advanced
 
