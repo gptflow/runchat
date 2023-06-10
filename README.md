@@ -683,7 +683,7 @@ The changes that need to be made to the config file are minimal. It's enough to 
 }
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-2.gif">
+<img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-3.gif">
 
 ## Advanced
 
