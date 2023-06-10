@@ -500,7 +500,7 @@ npx runchat -m "Could you please review text summaries from {[fs:./*_summary.txt
 
 While this approach is absolutely valid, it has its flaws:
 
-- It requires some skills in working with bash. I love bash, but it would be nice to solve such tasks without the need to program anything.
+- It requires some bash skills. I like bash, but it would be nice to solve such tasks without the need to program anything.
 - It will be more difficult for you to share your code with others, as distributing a bash file is much harder than, for example, an npm package.
 - You won't be able to use bash code from other RunChat configuration files.
 - Passing data between tasks through files is not always the best option. For instance, if it's temporary data - you'll have to remember to delete temporary files after executing the command.
@@ -560,7 +560,7 @@ Above, we provided a configuration for parallel summary generation. Now let's ad
               "content": [
                 "Could you please create a short summary on what this file is about:",
                 "{[fs:chapter_1.txt?mode=text]}.",
-                "Please put the result into a `chapter_1_summary context variable`"
+                "Please put the result into a `chapter_1_summary` context variable`"
               ]
             }
           ]
@@ -574,7 +574,7 @@ Above, we provided a configuration for parallel summary generation. Now let's ad
               "content": [
                 "Could you please create a short summary on what this file is about:",
                 "{[fs:chapter_2.txt?mode=text]}",
-                "Please put the result into a `chapter_2_summary context variable`"
+                "Please put the result into a `chapter_2_summary` context variable`"
               ]
             }
           ]
