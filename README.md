@@ -695,4 +695,5 @@ The changes that need to be made to the config file are minimal. It's enough to 
 - Creating and distribute own resolver
 - Project file
 - Use a resolver in the project
+- API
 - Example project: TODO
