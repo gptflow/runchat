@@ -455,6 +455,8 @@ And the file resolver will use the path `./examples/Navigation.tsx` in the start
 
 ### Context resolver
 
+TOOD REWRITE IT
+
 The next section is "Tasks," one of the most important, but before we get to it, we need to study another type of resource resolver - the context resolver. Every time you run RunChat, an execution context is created internally. The execution context is a store of various information necessary for RunChat to work. Among other things, the context stores a set of data in which you can write and from which you can read values.
 
 Just like with files, we can teach ChatGPT to wrap some data in special markers, so that RunChat can later recognize these markers and process the information contained in them. This is exactly how context variables work.
