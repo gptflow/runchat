@@ -35,7 +35,7 @@ Before you read everything else, I believe that any good tool should be benefici
 npx runchat -c runchat/recipes/modify-files
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/modify-files.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/modify-files.gif">
 
 ## Run you first chat
 
@@ -45,7 +45,7 @@ Alright, let's get started. To call ChatGPT using RunChat, you simply need to ru
 npx runchat -m "Hey ChatGPT, how are you?"
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/how_are_you.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/how_are_you.gif">
 
 Essentially, it's the same as going to the chat.openai.com website, writing a greeting, and getting a response, but it's all done through the console.
 
@@ -57,10 +57,10 @@ RunChat allows you to use variables in messages. Use the -v option in order to s
 npx runchat -m "Hey ChatGPT, my name is {{name}}. How are you?" -vname=Alex
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/my_name_is.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/my_name_is.gif">
 
 You can choose not to specify a variable's value using -v, and then RunChat will ask for its value using an interactive prompt.
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/name_prompt.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/name_prompt.gif">
 
 ### Message resources
 
@@ -71,7 +71,7 @@ In that case, RunChat provides the concept of Resources. Resources allow you to 
 npx runchat -m "Could you please create a short summary on what this file is about {[fs:book_chapter.txt?mode=text]}".
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/read_chapter.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/read_chapter.gif">
 
 In the example above, RunChat sees the block inside `{[` and `]}` and understands that this is a reference to a resource. `book_chapter.txt?mode=text` is the resource specifier, `fs` is the resource type. It then passes the specifier to the code that handles `fs` type resources, waits for a response, and inserts its content instead of the original structure.
 
@@ -95,7 +95,7 @@ What if you want to use a file resource, but at the same time, the path to the f
 npx runchat -m "Could you please create a short summary on what this file is about {[fs:{{file}}?mode=text]}"
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/read_chapter_dynamic.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/read_chapter_dynamic.gif">
 
 ### Chat config files
 
@@ -146,7 +146,7 @@ Pay attention to some details:
 npx runchat -c ./be-a-linux.json
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/be-a-linux.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/be-a-linux.gif">
 
 Sometimes it may be convenient to keep your main prompt in a file, but also have the ability to add a clarifying or additional message to it. In this case, you can use both -c and -m options.
 
@@ -156,7 +156,7 @@ npx runchat -c ./be-a-linux.json -m "Please also run `date` command"
 
 In this case, the message passed in -m will be added to the messages from the config file passed in -c.
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/be-a-linux-2.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/be-a-linux-2.gif">
 
 ### Extending chat config files
 
@@ -185,7 +185,7 @@ Note that by extending the `be-a-linux.json` file, we added the message "Please 
 npx runchat -c ./be-a-linux-it.json -m "Please also run `date` command"
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/be-a-linux-it.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/be-a-linux-it.gif">
 
 ### Config file path resolution
 
@@ -398,7 +398,7 @@ And if you've previously taught ChatGPT to work with start and end markers, the 
 npx runchat -c runchat/recipes/base -m "Hey! Could you please create a Hello world react component and save it to a MyComponent.tsx file"
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/create-file.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/create-file.gif">
 
 `runchat/recipes/base` is the base chat file shipped with the `runchat` package. It used to teach ChatGPT how to work with file start and end markers, as well as with context variables. Here's the content of this file:
 
@@ -488,7 +488,7 @@ wait
 npx runchat -m "Could you please review text summaries from {[fs:./*_summary.txt]} and create a resulting file that contains: a table of contents and a summary texts for the chapters passed to the input. A table of contents item should contain a number and a short description sentence of 5-10 words. Do not add any chapters that are not in the input" > result.txt
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-1.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/table-of-contents-1.gif">
 
 While this approach is absolutely valid, it has its flaws:
 
@@ -598,7 +598,7 @@ Above, we provided a configuration for parallel summary generation. Now let's ad
 npx runchat -c ./toc.json
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-2.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/table-of-contents-2.gif">
 
 Take note of the following:
 
@@ -676,7 +676,7 @@ The changes that need to be made to the config file are minimal. It's enough to 
 }
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-3.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/table-of-contents-3.gif">
 
 ## Advanced
 
