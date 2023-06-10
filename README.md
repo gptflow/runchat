@@ -483,8 +483,7 @@ So far, we've only learned how to run a single instance of a chat, and it may se
 Everything we've discussed so far has been about launching just one chat with ChatGPT, but what if we're tackling a problem that's too complex to solve with just one chat? To understand this in more detail, let's return to the example with the chapter summary from the book, but now let's imagine that we have several files and we want to:
 
 - simultaneously write a summary for each chapter;
-- combine all the summaries into one and save the result in a file.
-- Add the list of chapters at the beginning of the resulting file.
+- create a table of contents based on the summaries;
 
 To run parallel generation we could run several RunChat commands and wait for their execution:
 
@@ -498,8 +497,6 @@ npx runchat -m "Could you please review text summaries from {[fs:./*_summary.txt
 ```
 
 <img src="https://github.com/gptflow/runchat/blob/readme/assets/table-of-contents-1.gif">
-
-
 
 - Running multiple tasks
   generate summary concurrently
