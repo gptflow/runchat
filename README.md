@@ -818,7 +818,7 @@ Let's discuss variable and resource resolution in more detail.
 
 Variable resolution occurs in the first phase - preparation. RunChat recursively traverses all nodes in depth and every time it finds a structure like `{{var_name}}` within a message text or another variable's value, it tries to determine its value and replace `{{var_name}}` with the resolved value.
 
-To determine the value of a variable, RunChat goes through nodes upwards from the node where `{{var_name}}` was found to the root node Root until it finds a node which has a value for `var_name` in its `vars`. Here is a visual representation of how variables from the `chapter_summary` node were resolved.
+To determine the value of a variable, RunChat goes through nodes upwards from the node where `{{var_name}}` was found to the root node `Root` until it finds a node which has a value for `var_name` in its `vars`. Here is a visual representation of how variables from the `chapter_summary` node were resolved.
 
 <img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/resolve-var.png">
 
