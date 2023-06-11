@@ -788,7 +788,7 @@ It's important to note a few things from this scheme:
 - Variable values are stored in the node where you defined them
 - Configurations you inherited from are full-fledged parts of the structure
 
-Even you didn't pass any configuration file and just used `-m` with a simple test message RunChat will automatically create a task node for that message and a Root node that inherits from that node:
+Even if you didn't pass any configuration file and just used `-m` with a simple test message RunChat will automatically create a task node for that message and a Root node that inherits from that node:
 
 ```bash
 npx runchat -m "Hey ChatGPT, my name is {{name}}. How are you?" -vname=Alex
@@ -798,13 +798,37 @@ npx runchat -m "Hey ChatGPT, my name is {{name}}. How are you?" -vname=Alex
   <img style="width: 50%" src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/task-tree-one-message.png">
 </div>
 
-- Resolution phases
-- Var resolution model
-- Resource resolution model
+### Resolution phases
+
+There is a strict algorithm inside RunChat for preparing and launching a config file:
+
+Phase 1: **Preparation**:
+
+- Resolving variables in messages and inside other variables
+- Buld task tree node structure
+
+Phase 2: **Execution**:
+
+- Resolving message resources
+- Calling ChatGPT
+
+Let's discuss variable and resource resolution in more detail.
+
+#### Variable resolution flow
+
+Variable resolution occurs in the first phase - preparation. RunChat recursively traverses all nodes in depth and every time it finds a structure like `{{var_name}}` within a message text or another variable's value, it tries to determine its value and replace `{{var_name}}` with the resolved value.
+
+To determine the value of a variable, RunChat goes through nodes upwards from the node where `{{var_name}}` was found to the root node Root until it finds a node which has a value for `var_name` in its `vars`. Here is a visual representation of how variables from the 'chapter_summary' node were resolved.
+
+<img style="width: 50%" src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/task-tree-one-message.png">
+
+#### Resource resolution flow
+
 - Create and distribute own chat config
 - Creating and distribute own resolver
 - Project file
 - Use a resolver in the project
+
 - API
 - Example project: TODO
 
