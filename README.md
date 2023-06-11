@@ -775,10 +775,27 @@ npx runchat -c ./toc.json
 
 <img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/table-of-contents-4.gif">
 
-Alright, now let's get to the main part. When we launch RunChat, it creates a structure that describes the configuration file you passed in the -c option. This structure is a tree, with nodes being the tasks from your configuration file. Every structure that has a 'messages' field or a 'tasks' field is a node in the configuration. It will be easier to understand if we visualize everything.
+Alright, now let's get to the main part. When we launch RunChat, it creates a structure that describes the configuration file you passed in the `-c` option. This structure is a tree, with nodes being the tasks from your configuration file. Every structure that has a `messages` field or a `tasks` field is a node in the configuration. It will be easier to understand if we visualize everything.
 
 <div align="center">
   <img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/task-tree.png">
+</div>
+
+It's important to note a few things from this scheme:
+
+- There is always a Root node that inherits from the configuration file you passed in the `-c` option
+- The Root node stores the values of the variables that you passed through `-v` or in the interactive prompt
+- Variable values are stored in the node where you described them
+- Configurations you inherited from are full-fledged parts of the structure
+
+This tree-like structure is created even when you didn't pass any configuration file and just used -m with a simple test message:
+
+```bash
+npx runchat -m "Hey ChatGPT, my name is {{name}}. How are you?" -vname=Alex
+```
+
+<div align="center">
+  <img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/task-tree-one-message.png">
 </div>
 
 - Resolution phases
@@ -791,6 +808,9 @@ Alright, now let's get to the main part. When we launch RunChat, it creates a st
 - API
 - Example project: TODO
 
+````
+
 ```
 
 ```
+````
