@@ -810,9 +810,10 @@ Phase 1: **Preparation**:
 Phase 2: **Execution**:
 
 - Resolving message resources
+- Resolving messages
 - Calling ChatGPT
 
-Let's discuss variable and resource resolution in more detail.
+Let's discuss how variables, resources and messages get resolved during this phases
 
 #### Variable resolution flow
 
@@ -823,6 +824,8 @@ To determine the value of a variable, RunChat goes through nodes upwards from th
 <img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/resolve-var.png">
 
 #### Resource resolution flow
+
+#### Message resolution flow
 
 - Create and distribute own chat config
 - Creating and distribute own resolver
