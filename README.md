@@ -785,17 +785,17 @@ It's important to note a few things from this scheme:
 
 - There is always a Root node that inherits from the configuration file you passed in the `-c` option
 - The Root node stores the values of the variables that you passed through `-v` or in the interactive prompt
-- Variable values are stored in the node where you described them
+- Variable values are stored in the node where you defined them
 - Configurations you inherited from are full-fledged parts of the structure
 
-This tree-like structure is created even when you didn't pass any configuration file and just used -m with a simple test message:
+Even you didn't pass any configuration file and just used `-m` with a simple test message RunChat will automatically create a task node for that message and a Root node that inherits from that node:
 
 ```bash
 npx runchat -m "Hey ChatGPT, my name is {{name}}. How are you?" -vname=Alex
 ```
 
 <div align="center">
-  <img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/task-tree-one-message.png">
+  <img style="width: 50%" src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/task-tree-one-message.png">
 </div>
 
 - Resolution phases
