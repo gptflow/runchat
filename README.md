@@ -778,7 +778,7 @@ npx runchat -c ./toc.json
 Alright, now let's get to the main part. When we launch RunChat, it creates a structure that describes the configuration file you passed in the -c option. This structure is a tree, with nodes being the tasks from your configuration file. Every structure that has a 'messages' field or a 'tasks' field is a node in the configuration. It will be easier to understand if we visualize everything.
 
 <div align="center">
-  <img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/task-tree.gif">
+  <img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/task-tree.png">
 </div>
 
 - Resolution phases
