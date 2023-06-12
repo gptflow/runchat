@@ -773,12 +773,12 @@ And here is the `chapter-summary.json`:
 npx runchat -c ./toc.json
 ```
 
-<img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/table-of-contents-4.gif">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/table-of-contents-4.gif">
 
 Alright, now let's get to the main part. When we launch RunChat, it creates a structure that describes the configuration file you passed in the `-c` option. This structure is a tree, with nodes being the tasks from your configuration file. Every structure that has a `messages` field or a `tasks` field is a node in the configuration. It will be easier to understand if we visualize everything.
 
 <div align="center">
-  <img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/task-tree.png">
+  <img src="https://github.com/gptflow/runchat/blob/main/assets/task-tree.png">
 </div>
 
 It's important to note a few things from this scheme:
@@ -795,7 +795,7 @@ npx runchat -m "Hey ChatGPT, my name is {{name}}. How are you?" -vname=Alex
 ```
 
 <div align="center">
-  <img style="width: 50%" src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/task-tree-one-message.png">
+  <img style="width: 50%" src="https://github.com/gptflow/runchat/blob/main/assets/task-tree-one-message.png">
 </div>
 
 ### Resolution phases
@@ -821,7 +821,7 @@ Variable resolution occurs in the first phase - preparation. RunChat recursively
 
 To determine the value of a variable, RunChat goes through nodes upwards from the node where `{{var_name}}` was found to the root node `Root` until it finds a node which has a value for `var_name` in its `vars`. Here is a visual representation of how variables from the `chapter_summary` node were resolved.
 
-<img src="https://github.com/gptflow/runchat/blob/readme-advanced/assets/resolve-var.png">
+<img src="https://github.com/gptflow/runchat/blob/main/assets/resolve-var.png">
 
 #### Resource resolution flow
 
