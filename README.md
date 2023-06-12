@@ -680,13 +680,164 @@ The changes that need to be made to the config file are minimal. It's enough to 
 
 ## Advanced
 
-- Task tree mental model
-- Resolution phases
-- Var resolution model
-- Resource resolution model
+### Task tree mental model
+
+Every time RunChat is launched, it creates a certain data structure that is used during task execution. Understanding this structure is very crucial to creating configurations of any complexity. Let's consider everything using the example of a book summary and the contents of its chapters. However, this time we'll complicate the conditions a bit:
+
+- The task of creating a summary should be in a separate file
+- We want to be able to specify the final text localization
+
+Here is the updated `toc.json` file:
+
+```json
+{
+  "title": "Summaries and table of contents",
+  "args": {
+    "lang": "In what language should the result be?"
+  },
+  "tasks": [
+    {
+      "title": "Summaries",
+      "tasks": [
+        {
+          "title": "Chapter 1 summary",
+          "extend": "./chapter-summary.json",
+          "vars": {
+            "file_path": "./chapter_1.txt",
+            "save_to": "chapter_1_summary.ctx"
+          }
+        },
+        {
+          "title": "Chapter 2 summary",
+          "extend": "./chapter-summary.json",
+          "vars": {
+            "file_path": "./chapter_2.txt",
+            "save_to": "chapter_2_summary.ctx"
+          }
+        }
+      ],
+      "concurrent": true
+    },
+    {
+      "title": "Table of contents",
+      "extend": "runchat/recipes/base",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            "Review text summaries from {[ctx:*_summary]} and create a text file result.txt",
+            "that contains: a table of contents and a summary texts for the ",
+            "chapters passed to the input. A table of contents item should contain a number ",
+            "and a short description sentence of 5-10 words. Do not add any chapters that ",
+            "are not in the input. Please use the {{lang}} language."
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Changes review:
+
+- Now the summary generators are inherited from chapter-summary
+- We've added a `lang` parameter to args
+- We use `lang` in the task that combines the results and writes the table of contents
+
+And here is the `chapter-summary.json`:
+
+```json
+{
+  "title": "Chapter summary",
+  "extend": "runchat/recipes/base",
+  "args": {
+    "file_path": "A path to a text file to generate summary for",
+    "save_to": "A name of the context file to save the result to",
+    "lang": "A language of the summary"
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        "Please read the text:",
+        "{[fs:{{file_path}}?mode=text]}.",
+        "Create a file `{{save_to}}.ctx` that contains a short summary on what this text is about.",
+        "Please use {{lang}} language for the summary text"
+      ]
+    }
+  ]
+}
+```
+
+```bash
+npx runchat -c ./toc.json
+```
+
+<img src="https://github.com/gptflow/runchat/blob/main/assets/table-of-contents-4.gif">
+
+Alright, now let's get to the main part. When we launch RunChat, it creates a structure that describes the configuration file you passed in the `-c` option. This structure is a tree, with nodes being the tasks from your configuration file. Every structure that has a `messages` field or a `tasks` field is a node in the configuration. It will be easier to understand if we visualize everything.
+
+<div align="center">
+  <img src="https://github.com/gptflow/runchat/blob/main/assets/task-tree.png">
+</div>
+
+It's important to note a few things from this scheme:
+
+- There is always a Root node that inherits from the configuration file you passed in the `-c` option
+- The Root node stores the values of the variables that you passed through `-v` or in the interactive prompt
+- Variable values are stored in the node where you defined them
+- Configurations you inherited from are full-fledged parts of the structure
+
+Even if you didn't pass any configuration file and just used `-m` with a simple test message RunChat will automatically create a task node for that message and a Root node that inherits from that node:
+
+```bash
+npx runchat -m "Hey ChatGPT, my name is {{name}}. How are you?" -vname=Alex
+```
+
+<div align="center">
+  <img style="width: 50%" src="https://github.com/gptflow/runchat/blob/main/assets/task-tree-one-message.png">
+</div>
+
+### Resolution phases
+
+There is a strict algorithm inside RunChat for preparing and launching a config file:
+
+Phase 1: **Preparation**:
+
+- Resolving variables in messages and inside other variables
+- Buld task tree node structure
+
+Phase 2: **Execution**:
+
+- Resolving message resources
+- Resolving messages
+- Calling ChatGPT
+
+Let's discuss how variables, resources and messages get resolved during this phases
+
+#### Variable resolution flow
+
+Variable resolution occurs in the first phase - preparation. RunChat recursively traverses all nodes in depth and every time it finds a structure like `{{var_name}}` within a message text or another variable's value, it tries to determine its value and replace `{{var_name}}` with the resolved value.
+
+To determine the value of a variable, RunChat goes through nodes upwards from the node where `{{var_name}}` was found to the root node `Root` until it finds a node which has a value for `var_name` in its `vars`. Here is a visual representation of how variables from the `chapter_summary` node were resolved.
+
+<img src="https://github.com/gptflow/runchat/blob/main/assets/resolve-var.png">
+
+#### Resource resolution flow
+
+#### Message resolution flow
+
 - Create and distribute own chat config
 - Creating and distribute own resolver
 - Project file
 - Use a resolver in the project
+
 - API
 - Example project: TODO
+
+````
+
+```
+
+```
+````
