@@ -825,19 +825,170 @@ To determine the value of a variable, RunChat goes through nodes upwards from th
 
 #### Resource resolution flow
 
+The resource and message resolution occurs in the second phase - execution. Every time RunChat finds a structure in the text like `{[resource_type:resource_query]}`, the following happens:
+
+- RunChat finds the necessary resource resolver among the available ones, using the `resource_type` type, and calls it with the `resource_query` parameter
+  The resource resolver returns the data corresponding to the `resource_query`. A resource resolver is simply an `async` function that receives the `resource_query` and performs all necessary actions to obtain the necessary data.
+- RunChat replaces the `{[resource_type:resouce_query]}` structure with the received value
+
+Let's consider everything using the `fs` resource resolver example. `fs` is a built-in resource resolver, so it's available to you out of the box. The `fs` resolver is just a function and here is its code:
+
+```typescript
+import path from "path";
+import { glob } from "glob";
+import { URLSearchParams } from "url";
+import { Context, ResourceResolverFactory, TaskConfig } from "../types";
+import { promises } from "fs";
+import { configToString } from "../task";
+
+type BaseDir = "config" | "project";
+type Mode = "default" | "text" | "filename";
+
+const createFsResolver: ResourceResolverFactory = async (ctx: Context) => {
+  return async (query: string, config: TaskConfig) => {
+    const [globQuery, search] = query.split("?");
+    const searchParams = new URLSearchParams(search ? search : "");
+
+    // default = text with a wrapper
+    // text = text with no wrapper
+    // name-only = put the file name instead of file content
+    const mode: Mode = (searchParams.get("mode") as Mode) || "default";
+    // put a path from usePath instead of real file path
+    const usePath = searchParams.get("usePath");
+    //
+    const baseDirType: BaseDir =
+      (searchParams.get("baseDir") as BaseDir) || "project";
+
+    const baseDir = baseDirType === "config" ? config.baseDir : ctx.baseDir;
+
+    if (!baseDir) {
+      throw new Error(
+        `Base dir is empty or undefined:\n ${configToString(config)}`
+      );
+    }
+
+    const files = await glob(globQuery, {
+      cwd: baseDir,
+      absolute: false,
+      nodir: true,
+    });
+
+    if (files.length !== 1 && usePath) {
+      throw new Error(
+        `Got ${files.length} files for usePath. Should be a single file`
+      );
+    }
+
+    const contents: Record<string, string> = {};
+    for (const it of files) {
+      const filePath = path.join(baseDir, it);
+      let content: string = "";
+      // Remove a file
+      if (mode === "filename") {
+        content = it;
+      } else {
+        content = await promises.readFile(filePath, "utf-8");
+      }
+      // Wrap into a parsable block by default
+      const itemPath = usePath || it;
+      contents[itemPath] =
+        mode === "default"
+          ? `#>>${itemPath}>>#${content}#<<${itemPath}<<#`
+          : content;
+    }
+    return Object.values(contents).join("\n");
+  };
+};
+
+export default createFsResolver;
+```
+
+When you run the command:
+
+```bash
+npx runchat -m "Hey ChatGPT, could you please create a summary for the file text {[fs:chatper_1.txt?mode=text]}" -llogs
+```
+
+RunChat will understand that this is a request to the `fs` resolver and will call it with the `query` equal to `chatper_1.txt?mode=text`.
+
+Then, the `fs` resolver will parse the query and understand that it needs to find all files that match the glob expression `chapter_1.txt` and return their text. Then when it finds them, it will return the text of the found files to RunChat, after which RunChat will replace `{[fs:chatper_1.txt?mode=text]}` with the resulting text. Finally, the ChatGPT ineraction log will look like this:
+
+```txt
+[Chat Call ChatGPT] messages: [
+  {
+    "role": "user",
+    "content": "Hey ChatGPT, could you please create a summary for the file text Chapter 1
+I am by birth a Genevese, and my family is one of the most distinguished of that republic.
+... Chapter text goes here ...
+ and of self-control, I was so guided by a silken cord that all seemed but one train of enjoyment to me.
+"
+  }
+]
+[Chat Call ChatGPT] gpt response:
+The narrator, who is from a distinguished family in Geneva, tells the story of his parents' marriage. His father, a respected public figure, had a close friend named Beaufort who fell into poverty and retreated to Lucerne with his daughter. The narrator's father sought out Beaufort and helped him, but Beaufort died, leaving his daughter Caroline an orphan and a beggar. The narrator's father took Caroline under his care and eventually married her. Despite their age difference, the couple had a strong bond of affection and devotion. They traveled through Italy, Germany, and France, and the narrator was born in Naples. He was their only child for several years and was deeply loved and cherished by his parents.
+[Chat Call ChatGPT] gpt response done.
+```
+
 #### Message resolution flow
 
-- Create and distribute own chat config
-- Creating and distribute own resolver
-- Project file
-- Use a resolver in the project
+To understand what message resolving is, let's go back to the scheme from the task tree mental model and pay attention to this part of the scheme:
+<img src="https://github.com/gptflow/runchat/blob/main/assets/task-extend.png">
 
-- API
-- Example project: TODO
+As you can see, `Chapter 1 Summary` is derived from `Chapter Summary`, which in turn is derived from `Base`. In more complex examples, inheritance chains can be even longer. When RunChat sees an inheritance chain, it merges the messages into a sequence, starting with `Base`. For example, when this configuration is executed, the final interaction with ChatGPT will include a sequence of two messages:
 
-````
+```txt
+[Chat Chapter 1 summary] messages: [
+  {
+    "role": "system",
+    "content": "You act as a helpful developer assistant"
+  },
+  {
+    "role": "user",
+    "content": "Hello! During our upcoming conversation, I will occasionally ask you to create a file
+or implement a particular piece of code. In these situations, I would like you to
+always wrap the file content within special blocks: #>>{path}>># and #<<{path}<<#,
+where {path} is replaced with the actual path to the file.
+Okay, let's try it: Write a simple example using TypeScript."
+  },
+  {
+    "role": "assistant",
+    "content": "#>>examples/Dummy.ts>>#export function example1(value: string): string {
+  return `Hey ${value}`;
+}
+#<<examples/Dummy.ts<<#"
+  },
+  {
+    "role": "user",
+    "content": "Perfect. I will give you the next task in the following messages"
+  },
+  {
+    "role": "user",
+    "content": "Please read the text:
+Chapter 1
+I am by birth a Genevese, and my family is one of the most distinguished of that republic. My ancestors had been for many years counsellors and syndics, and my father had filled several public situations with honour and reputation.
 
+...Chapter goes here...
+
+
+Create a file `chapter_1_summary.ctx.ctx` that contains a short summary on what this text is about.
+Please use English language for the summary text"
+  }
+]
+[Chat Chapter 1 summary] gpt response:
+#>>chapter_1_summary.ctx>>#The text is about the life of the narrator's family, particularly his father's friendship with a merchant named Beaufort, his marriage to Beaufort's daughter Caroline, and their travels through Italy, Germany, and France. The text also highlights the narrator's childhood and his parents' deep love and devotion towards him. #<<chapter_1_summary.ctx<<#
+[Chat Chapter 1 summary] gpt response done.
 ```
 
-```
-````
+This approach allows you to describe the basic behavior in the base configuration and refine it in the messages of descendants. In the example above, `Base` is responsible for teaching ChatGPT how to work with files, and the messages from `Chapter Summary` solve the task of working with summary files based on what was already explained in `Base`.
+
+### Create and distribute own chat config
+
+### Creating and distribute own resolver
+
+### Project file
+
+### Use a resolver in the project
+
+### Example project
+
+TODO

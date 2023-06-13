@@ -22,20 +22,6 @@
     },
     {
       "role": "user",
-      "content": [
-        "Also during our upcoming conversation, I will occasionally ask you to create a context variable,",
-        "or to put some value into context under the certain name. In these situations, I would like you to",
-        "always wrap the value within special blocks: #>>{name}.ctx>># and #<<{name}.ctx<<#,",
-        "where {name} is replaced with the actual name of the variable",
-        "Okay, let's try it: Put a the capital of England into the context variable `capital`."
-      ]
-    },
-    {
-      "role": "assistant",
-      "content": "#>>capital.ctx>>#London#<<capital.ctx<<#"
-    },
-    {
-      "role": "user",
       "content": "Perfect. I will give you the next task in the following messages"
     }
   ]
