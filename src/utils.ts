@@ -102,7 +102,7 @@ export function generateFunnyDescriptiveName(): string {
   const formattedDate = monthNames[date.getMonth()] + date.getDate().toString();
   const formattedTime =
     date.getHours().toString().padStart(2, "0") +
-    ":" +
+    "_" +
     date.getMinutes().toString().padStart(2, "0");
 
   return `Log_${formattedDate}_${formattedTime}__${randomAdjective}-${randomAnimalName}`;

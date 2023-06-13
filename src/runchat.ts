@@ -15,7 +15,7 @@ import { TaskArgs, TaskConfig } from "./types";
 
 const program = new Command();
 program
-  .version("0.1.0")
+  .version("0.8.7")
   .description("A conveyor belt for ChatGPT tasks")
   .option("-c, --config <path>", "Config file to use")
   .option(
