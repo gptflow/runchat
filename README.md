@@ -5,6 +5,40 @@ RunChat lets you set up one or multiple LLM chats into an operation line to addr
   </p>
 </div>
 
+## Table of contents
+
+- [What is RunChat?](#what-is-runchat)
+- [ChatGPT API KEY](#chatgpt-api-key)
+- [NodeJS is required](#nodejs-is-required)
+- [Quick profit](#quick-profit)
+- [Run you first chat](#run-you-first-chat)
+  - [Message variables](#message-variables)
+  - [Message resources](#message-resources)
+  - [Mixing resources and variables](#mixing-resources-and-variables)
+  - [Chat config files](#chat-configrfiles)
+  - [Extending chat config files](#extending-chat-config-files)
+  - [Config file path resolution](#config-file-path-resolution)
+  - [Config file distribution](#config-file-distribution)
+  - [ChatGPT params](#chatgpt-params)
+- [Resource resolvers](#resource-resolvers)
+  - [File system resolver](#file-system-resolver)
+    - [Searching for one or more files](#searching-for-one-or-more-files)
+    - [Creating real files](#creating-real-files)
+    - [Faking file path](#faking-file-path)
+  - [Context resolver](#context-resolver)
+- [Tasks](#tasks)
+- [Advanced](#advanced)
+  - [Task tree mental model](#task-tree-mental-model)
+  - [Resolution phases](#resolution-phases)
+    - [Variable resolution flow](#variable-resolution-flow)
+    - [Resource resolution flow](#resource-resolution-flow)
+    - [Message resolution flow](#message-resolution-flow)
+  - [Create and distribute own chat config](#create-and-distribute-own-chat-config)
+  - [Creating and distribute own resolver](#creating-and-distribute-own-resolver)
+  - [Project file](#project-file)
+  - [Use a resolver in the project](#use-a-resolver-in-the-project)
+  - [Example project](#example-project)
+
 ## What is RunChat?
 
 RunChat is like a conveyor belt for ChatGPT tasks. It's like having a production line where you can set up and run several tasks, big or small, one after another, or even all at once. With RunChat, you can take all these separate tasks, whether they're simple or complex, and piece them together into one smooth operation.
