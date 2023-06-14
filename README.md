@@ -1017,6 +1017,51 @@ This approach allows you to describe the basic behavior in the base configuratio
 
 ### Create and distribute own chat config
 
+Chat config files can easily be shaped into a module to share them with other users or reuse them in other projects. In this section, we will create and publish a simple chat config, and also demonstrate how to use it in other projects with npm.
+
+Let's imagine that you've decided to publish the `be-a-linux.json` chat config.
+
+Here's what you need to do to accomplish this:
+
+- Create an npm package with `npm init`.
+- Add the necessary files to it.
+- Publish the package with `npm publish`.
+
+Let's go through each of these steps. First, let's create a directory for the new npm package:
+
+```bash
+mkdir be-a-linux
+```
+
+Initialize the package with npm init -y.
+
+```bash
+npm init -y
+```
+
+<img src="https://github.com/gptflow/runchat/blob/main/assets/npm-init.gif">
+
+Add the `be-a-linux.json` to the created directory:
+
+<img src="https://github.com/gptflow/runchat/blob/main/assets/add-be-a-linux.gif">
+
+Our package is now ready for publication. To publish it, you need to have a registered account on <a href="https://npmjs.com">npmjs</a>. After registering, to publish the package, you need to run the command `npm publish`:
+
+```bash
+npm publish
+```
+
+<img src="https://github.com/gptflow/runchat/blob/main/assets/npm-publish.gif">
+
+Publishing the package may require you to log into npmjs.com, and after successful login, the package will be published. Now, after the successful publication of the package, anyone with nodejs installed can use it. To use a pubished package you have to install it using `npm install` command. You can install the package locally or globally, depending on your needs.
+
+```bash
+npm i be-a-linux
+npx runchat -c be-a-linux/be-a-linux.json
+```
+
+<img src="https://github.com/gptflow/runchat/blob/main/assets/use-linux.gif">
+
 ### Creating and distribute own resolver
 
 ### Project file
