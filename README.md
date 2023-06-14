@@ -7,7 +7,6 @@ RunChat lets you set up one or multiple LLM chats into an operation line to addr
 
 ## Table of contents
 
-- [Message variables](#message-variables)
 - [What is RunChat?](#what-is-runchat)
 - [ChatGPT API KEY](#chatgpt-api-key)
 - [NodeJS is required](#nodejs-is-required)
